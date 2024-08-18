@@ -61,11 +61,11 @@ export async function loginUserctr(request, response) {
     }
   }
 }
-export async function courses(request, response) {
+export async function getcoursesctr(request, response) {
   try {
     response.send(await getCourses());
   } catch (error) {
     //call back funtion we have req and res
-    response.send("mcourses not loaded");
+    response.send("courses not loaded");
   }
 }

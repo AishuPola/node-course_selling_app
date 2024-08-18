@@ -60,3 +60,47 @@ export async function loginAdminctr(request, response) {
 export async function getUser(request, response) {
   response.send({ token: request.rawHeaders[1] });
 }
+export async function getCourseByIdCtrl(request, response) {
+  const { id } = request.params;
+  try {
+    const res = await getCourseById(id);
+    res.data
+      ? response.send(res.data)
+      : response.status(404).send("course not found");
+  } catch (error) {
+    console.log(error);
+    response.status(500).send("fail to retrireve course");
+  }
+}
+export async function deleteCourseByIdCtrl(request, response) {
+  const { id } = request.params;
+  // console.log(id)
+  try {
+    const res = await getCourseById(id);
+    if (res.data) {
+      await deleteCourseById(id);
+      response.send({ msg: "deleted successfully", data: res.data });
+    } else {
+      response.status(404).send({ msg: "Course not found" });
+    }
+  } catch (error) {
+    response.status(500).send("deleted failed");
+  }
+}
+
+export async function editCoursesByIdctrl(request, response) {
+  const { id } = request.params;
+  const updatedata = request.body; //updated data
+  try {
+    const existingData = await getCourseById(id);
+    if (existingData.data) {
+      const result = await editCoursesById(existingData, updatedata);
+      response.send(result);
+    } else {
+      response.status(404).send({ msg: "Course not found" });
+    }
+  } catch (error) {
+    response.status(500).send("failed to edit the movie");
+  }
+  // console.log(id, data, movieIdx);
+}

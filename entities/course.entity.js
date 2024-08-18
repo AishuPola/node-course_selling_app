@@ -8,6 +8,10 @@ const courses = new Entity(
       service: "courseService",
     },
     attributes: {
+      courseId: {
+        type: "string",
+        required: true,
+      },
       coursename: {
         type: "string",
         required: true,
@@ -30,7 +34,7 @@ const courses = new Entity(
         pk: {
           // highlight-next-line
           field: "pk",
-          facets: ["coursename"],
+          facets: ["courseId"],
         },
         sk: {
           // highlight-next-line
