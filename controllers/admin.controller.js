@@ -1,4 +1,11 @@
-import { createAdmin, getAdminbyAdminname } from "../services/admin.service.js";
+import {
+  createAdmin,
+  getAdminbyAdminname,
+  getCourseById,
+  editCoursesById,
+  getCourses,
+  deleteCourseById,
+} from "../services/admin.service.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -72,6 +79,16 @@ export async function getCourseByIdCtrl(request, response) {
     response.status(500).send("fail to retrireve course");
   }
 }
+
+export async function getCoursesCtrl(request, response) {
+  try {
+    response.send(await getCourses());
+  } catch (error) {
+    //call back funtion we have req and res
+    response.send("courses not loaded");
+  }
+}
+
 export async function deleteCourseByIdCtrl(request, response) {
   const { id } = request.params;
   // console.log(id)

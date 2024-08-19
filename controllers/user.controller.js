@@ -2,6 +2,7 @@ import {
   createUser,
   getCourses,
   getuserbyusername,
+  getCourseById,
 } from "../services/user.service.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -67,5 +68,17 @@ export async function getcoursesctr(request, response) {
   } catch (error) {
     //call back funtion we have req and res
     response.send("courses not loaded");
+  }
+}
+export async function getCourseByIdCtrl(request, response) {
+  const { id } = request.params;
+  try {
+    const res = await getCourseById(id);
+    res.data
+      ? response.send(res.data)
+      : response.status(404).send("course not found");
+  } catch (error) {
+    console.log(error);
+    response.status(500).send("fail to retrireve course");
   }
 }

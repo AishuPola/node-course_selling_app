@@ -6,6 +6,10 @@ async function createAdmin(addAdmin) {
 async function getAdminbyAdminname(Adminname) {
   return await admin.get({ Adminname: Adminname }).go();
 }
+// all courses
+async function getCourses() {
+  return (await courses.scan.go()).data;
+}
 async function editCoursesById(existingData, updatedata) {
   return await courses
     .put({
@@ -29,4 +33,5 @@ export {
   getCourseById,
   deleteCourseById,
   editCoursesById,
+  getCourses,
 };
