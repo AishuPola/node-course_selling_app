@@ -18,7 +18,7 @@ const genHashPassword = async (password) => {
 };
 export async function createAdminctr(request, response) {
   const data = request.body;
-  if (data.password.length < 8) {
+  if (data && data.password && data.password.length < 8) {
     response.status(400).send({ msg: "pass is too short" });
     return;
   }
