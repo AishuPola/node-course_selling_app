@@ -16,9 +16,9 @@ router.post("/signup", createAdminctr);
 router.post("/login", loginAdminctr);
 router.post("/addcourse", auth, addCourseCtr);
 
-// router.get("/always", auth, getUser);
+router.get("/always", auth, getUser);
 
-router.get("/courses", getCoursesCtrl);
+// router.get("/courses", getCoursesCtrl);
 router.get("/courses/:id", getCourseByIdCtrl);
 router.delete("/courses/:id", deleteCourseByIdCtrl);
 router.put("/courses/:id", editCoursesByIdctrl);

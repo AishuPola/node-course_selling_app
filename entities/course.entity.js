@@ -16,6 +16,10 @@ const courses = new Entity(
         type: "string",
         required: true,
       },
+      username: {
+        type: "string",
+        required: true,
+      },
       description: {
         type: "string",
         required: true,

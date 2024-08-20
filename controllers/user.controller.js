@@ -2,7 +2,6 @@ import {
   createUser,
   getCourses,
   getuserbyusername,
-  getCourseById,
 } from "../services/user.service.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -30,8 +29,12 @@ export async function createUserctr(request, response) {
   const hashedPassword = await genHashPassword(data.password);
   try {
     await createUser({ username: data.username, password: hashedPassword });
+    const token = jwt.sign(
+      { id: userFromDb.data.username },
+      process.env.sECRET_KEY
+    );
 
-    response.status(201).send(data);
+    response.status(201).send({ msg: "Created sucessfully", data, token });
   } catch (error) {
     response.status(500).send("fail to add user"); //something bad happend on serve is 500
   }
@@ -54,7 +57,7 @@ export async function loginUserctr(request, response) {
     if (ispasswordcheck) {
       const token = jwt.sign(
         { id: userFromDb.data.username },
-        process.env.SECRET_KEY
+        process.env.sECRET_KEY
       );
       response.status(200).send({ msg: "Login sucessful", token });
     } else {
@@ -62,23 +65,14 @@ export async function loginUserctr(request, response) {
     }
   }
 }
+export async function getUser(request, response) {
+  response.send({ username: request.user });
+}
 export async function getcoursesctr(request, response) {
   try {
     response.send(await getCourses());
   } catch (error) {
     //call back funtion we have req and res
     response.send("courses not loaded");
-  }
-}
-export async function getCourseByIdCtrl(request, response) {
-  const { id } = request.params;
-  try {
-    const res = await getCourseById(id);
-    res.data
-      ? response.send(res.data)
-      : response.status(404).send("course not found");
-  } catch (error) {
-    console.log(error);
-    response.status(500).send("fail to retrireve course");
   }
 }

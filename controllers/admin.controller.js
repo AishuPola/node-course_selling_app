@@ -1,10 +1,9 @@
 import {
+  getCourseById,
   createAdmin,
   getAdminbyAdminname,
-  getCourseById,
-  editCoursesById,
-  getCourses,
   deleteCourseById,
+  editCoursesById,
 } from "../services/admin.service.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -32,7 +31,7 @@ export async function createAdminctr(request, response) {
   const hashedPassword = await genHashPassword(data.password);
   try {
     await createAdmin({ Adminname: data.Adminname, password: hashedPassword });
-    const token = jwt.sign({ id: data.Adminname }, process.env.SECRET_KEY);
+    const token = jwt.sign({ id: data.Adminname }, process.env.sECRET_KEY);
     response.status(200).send({ msg: "sign up sucessful", data, token });
   } catch (error) {
     response.status(500).send("fail to add Admin"); //something bad happend on serve is 500
@@ -56,7 +55,7 @@ export async function loginAdminctr(request, response) {
     if (ispasswordcheck) {
       const token = jwt.sign(
         { id: AdminFromDb.data.Adminname },
-        process.env.SECRET_KEY
+        process.env.sECRET_KEY
       );
       response.status(200).send({ msg: "Login sucessful", token });
     } else {
@@ -65,43 +64,35 @@ export async function loginAdminctr(request, response) {
   }
 }
 export async function getUser(request, response) {
-  response.send({ token: request.rawHeaders[1] });
+  response.send({ username: request.user });
 }
+
 export async function getCourseByIdCtrl(request, response) {
-  const { id } = request.params;
-  try {
-    const res = await getCourseById(id);
-    res.data
-      ? response.send(res.data)
-      : response.status(404).send("course not found");
-  } catch (error) {
-    console.log(error);
-    response.status(500).send("fail to retrireve course");
-  }
-}
-
-export async function getCoursesCtrl(request, response) {
-  try {
-    response.send(await getCourses());
-  } catch (error) {
-    //call back funtion we have req and res
-    response.send("courses not loaded");
-  }
-}
-
-export async function deleteCourseByIdCtrl(request, response) {
-  const { id } = request.params;
-  // console.log(id)
+  const id = request.params.id;
   try {
     const res = await getCourseById(id);
     if (res.data) {
-      await deleteCourseById(id);
+      response.send(res.data);
+    } else {
+      response.status(404).send("course not found");
+    }
+  } catch (error) {
+    response.status(500).send("fail to retrireve course");
+  }
+}
+export async function deleteCourseByIdCtrl(request, response) {
+  const id = request.params.id;
+  try {
+    const res = await getCourseById(id);
+
+    if (res.data) {
+      const result = await deleteCourseById(id);
       response.send({ msg: "deleted successfully", data: res.data });
     } else {
       response.status(404).send({ msg: "Course not found" });
     }
   } catch (error) {
-    response.status(500).send("deleted failed");
+    response.status(500).send({ msg: "deleted failed" });
   }
 }
 
