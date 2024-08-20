@@ -3,7 +3,6 @@ import {
   getcoursesctr,
   createUserctr,
   loginUserctr,
-  getCourseByIdCtrl,
   getUser,
 } from "../controllers/user.controller.js";
 import { auth } from "../middleware/auth.middleware.js";

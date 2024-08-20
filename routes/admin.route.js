@@ -6,7 +6,6 @@ import {
   getCourseByIdCtrl,
   deleteCourseByIdCtrl,
   editCoursesByIdctrl,
-  getCoursesCtrl,
 } from "../controllers/admin.controller.js";
 import { addCourseCtr } from "../controllers/addcourse.controller.js";
 import { auth } from "../middleware/auth.middleware.js";
